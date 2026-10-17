@@ -1,0 +1,15 @@
+# python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# recorded data, rollouts and model checkpoints stay out of git
+data/
+outputs/
+*.mp4
+*.npz
+*.ckpt
+*.pt
+*.pkl
+wandb/

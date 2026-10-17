@@ -1,0 +1,108 @@
+name: Tests
+
+# The study runs inside the framework: check out the framework at the tagged version this study
+# was run with at the root and this repository at research/. Bump CORE_REF only together with the
+# README's setup instructions.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CORE_REF: study-01-v1
+
+jobs:
+  test:
+    name: Python 3.12 tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      MUJOCO_GL: osmesa
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
+
+    steps:
+      - name: Check out the framework
+        uses: actions/checkout@v5
+        with:
+          repository: PhysAI-Robot/physai-robot-starter
+          ref: ${{ env.CORE_REF }}
+
+      - name: Check out this repository as research/
+        uses: actions/checkout@v5
+        with:
+          path: research
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Install headless rendering support
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends libosmesa6-dev
+
+      - name: Cache robot assets
+        uses: actions/cache@v5
+        with:
+          path: assets
+          key: robot-assets-${{ runner.os }}-${{ hashFiles('scripts/fetch_assets.py') }}
+
+      - name: Fetch robot assets
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: uv run python scripts/fetch_assets.py --robot so101
+
+      - name: Install the framework and its training dependencies
+        run: uv sync --locked --extra training
+
+      - name: Run the study's tests
+        run: |
+          uv run python - <<'PY'
+          import os
+          import sys
+
+          import pytest
+
+          # mujoco.Renderer under MUJOCO_GL=osmesa segfaults during CPython's normal
+          # interpreter shutdown on this runner, after pytest has already reported its
+          # result. os._exit() reports pytest's real exit code while skipping that unsafe
+          # native-library teardown.
+          exit_code = pytest.main(["research/tests/", "-q", "-rf"])
+          sys.stdout.flush()  # os._exit() would drop pytest's buffered report
+          os._exit(exit_code)
+          PY
+
+  format:
+    name: Format
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out the framework
+        uses: actions/checkout@v5
+        with:
+          repository: PhysAI-Robot/physai-robot-starter
+          ref: ${{ env.CORE_REF }}
+
+      - name: Check out this repository as research/
+        uses: actions/checkout@v5
+        with:
+          path: research
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Check formatting with the framework's ruff
+        run: uvx ruff@0.16.10 format --check research
