@@ -1,7 +1,7 @@
 """The `lerobot` policy: runs a LeRobot checkpoint (ACT or Diffusion Policy) in the loop.
 
 Nothing here imports torch at module scope. A checkpoint trained with `train_act.py` or
-`train_diffusion.py` on demonstrations recorded with `eval_policy.py --save-dataset` loads with `--checkpoint`.
+`train_diffusion.py` on demonstrations from `scripts/collect_demos.py` loads with `--checkpoint`.
 Observation packing, action chunk buffering and unit conversion come from
 `physai.policy.replay.VLAPolicy` (the framework's base class for checkpoint-backed policies) and
 match the format the recorder writes.

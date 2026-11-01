@@ -1,0 +1,205 @@
+[
+ {
+  "name": "act_nominal_unseeded",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_nominal_unseeded",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 56
+ },
+ {
+  "name": "act_nominal_seed1",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_nominal_seed1",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 61
+ },
+ {
+  "name": "act_nominal_seed2",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_nominal_seed2",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 78
+ },
+ {
+  "name": "act_nominal_seed3",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_nominal_seed3",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 72
+ },
+ {
+  "name": "act_randomized_look_seed0",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_randomized_look_seed0",
+  "robot": "so101",
+  "randomized_look": 1,
+  "isaac100": 88
+ },
+ {
+  "name": "act_randomized_look_seed1",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_randomized_look_seed1",
+  "robot": "so101",
+  "randomized_look": 1,
+  "isaac100": 88
+ },
+ {
+  "name": "act_randomized_look_seed2",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_randomized_look_seed2",
+  "robot": "so101",
+  "randomized_look": 1,
+  "isaac100": 91
+ },
+ {
+  "name": "act_both_renderers_unseeded",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_both_renderers_unseeded",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 94
+ },
+ {
+  "name": "act_both_renderers_seed1",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_both_renderers_seed1",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 91
+ },
+ {
+  "name": "act_isaac_only_100_unseeded",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_isaac_only_100_unseeded",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 85
+ },
+ {
+  "name": "act_isaac_only_200_unseeded",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_isaac_only_200_unseeded",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 91
+ },
+ {
+  "name": "act_isaac_only_200_seed1",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_isaac_only_200_seed1",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 90
+ },
+ {
+  "name": "act_isaac_only_400_unseeded",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_isaac_only_400_unseeded",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 97
+ },
+ {
+  "name": "act_chunk30_100demos_unseeded",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_chunk30_100demos_unseeded",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 26
+ },
+ {
+  "name": "act_chunk100_100demos_unseeded",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_chunk100_100demos_unseeded",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 55
+ },
+ {
+  "name": "act_nominal400_seed1",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_nominal400_seed1",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 61
+ },
+ {
+  "name": "act_nominal400_seed2",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_nominal400_seed2",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 74
+ },
+ {
+  "name": "act_nominal400_seed3",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_nominal400_seed3",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 90
+ },
+ {
+  "name": "act_nominal_seed4",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_nominal_seed4",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 71
+ },
+ {
+  "name": "act_nominal_seed5",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_nominal_seed5",
+  "robot": "so101",
+  "randomized_look": 0,
+  "isaac100": 75
+ },
+ {
+  "name": "act_randomized_look_seed3",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_randomized_look_seed3",
+  "robot": "so101",
+  "randomized_look": 1,
+  "isaac100": 89
+ },
+ {
+  "name": "act_randomized_look_seed4",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_randomized_look_seed4",
+  "robot": "so101",
+  "randomized_look": 1,
+  "isaac100": 93
+ },
+ {
+  "name": "act_randomized_look_bw_seed1",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_randomized_look_bw_seed1",
+  "robot": "so101",
+  "randomized_look": 1,
+  "isaac100": 80
+ },
+ {
+  "name": "act_randomized_look_bw_seed2",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_randomized_look_bw_seed2",
+  "robot": "so101",
+  "randomized_look": 1,
+  "isaac100": 89
+ },
+ {
+  "name": "act_randomized_look_bw_seed3",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/act_randomized_look_bw_seed3",
+  "robot": "so101",
+  "randomized_look": 1,
+  "isaac100": 94
+ },
+ {
+  "name": "viperx_act_nominal_seed1",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/viperx_act_nominal_seed1",
+  "robot": "viperx",
+  "randomized_look": 0,
+  "isaac100": 88
+ },
+ {
+  "name": "viperx_act_nominal_seed2",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/viperx_act_nominal_seed2",
+  "robot": "viperx",
+  "randomized_look": 0,
+  "isaac100": 85
+ },
+ {
+  "name": "viperx_act_randomized_look_seed1",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/viperx_act_randomized_look_seed1",
+  "robot": "viperx",
+  "randomized_look": 1,
+  "isaac100": 91
+ },
+ {
+  "name": "viperx_act_randomized_look_seed2",
+  "checkpoint": "hf:rizgiak/physai-study-01-checkpoints/viperx_act_randomized_look_seed2",
+  "robot": "viperx",
+  "randomized_look": 1,
+  "isaac100": 93
+ }
+]

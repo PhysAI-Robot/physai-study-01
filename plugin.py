@@ -6,4 +6,5 @@ never imports it by name.
 
 import research.classical_control.so101_visual_servo  # noqa: F401
 import research.imitation_learning.lerobot_policy  # noqa: F401
+import research.scripted_experts.viperx300s_pick_place_expert  # noqa: F401
 import research.scripted_experts.so101_pick_place_expert  # noqa: F401

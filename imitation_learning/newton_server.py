@@ -14,7 +14,7 @@ An optional fourth argument is a JSON object that changes the look (`tile` edge 
 The scene is the MJCF `newton_eval.py` exports from the running MuJoCo scene. Newton draws
 the arm, table, cube and target pad from it; the floor plane is replaced by 1/6 m tiles
 in the studio's two colours, because the checker floor is a cue ACT reads
-(the policies read it). MuJoCo's camera poses are passed in, so
+(`research/imitation_learning/FINDINGS.md`, M5). MuJoCo's camera poses are passed in, so
 the views match to the pixel and only the renderer differs.
 
 Research module: nothing in `src/physai` imports it.

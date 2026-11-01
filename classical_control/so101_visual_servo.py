@@ -41,7 +41,7 @@ SQUEEZE_GRIP = 0.15
 # physically stalled (blocked by the object) rather than still closing, used
 # by the CLOSE/RELEASE settle condition below. MuJoCo's own slowest,
 # still-converging closing rate during a normal CLOSE is about 0.006 per
-# step (measured from a trace of the controller); a
+# step (measured via research/classical_control/FINDINGS.md's trace); a
 # gripper actuator that is genuinely jammed against an object (seen on
 # Isaac's PhysX position drive, which otherwise tracks its ramping command
 # with ~no lag) stops moving almost entirely (~0 per step). This sits below

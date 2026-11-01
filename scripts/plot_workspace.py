@@ -6,7 +6,7 @@
 One column per evaluation JSON (from `eval_policy.py --json`), two rows: where the cube
 started and where the target pad was. Each episode is one point on the table seen from
 above (x forward, the robot just below the plot), green for success and a red cross for failure,
-over the region the manifest samples from. Needs matplotlib (`uv sync --extra training`).
+over the region the manifest samples from. Needs matplotlib (installed by `uv sync`).
 """
 
 from __future__ import annotations

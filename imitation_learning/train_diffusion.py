@@ -1,25 +1,27 @@
 """Train Diffusion Policy (LeRobot) on the same recorded demonstrations as `train_act.py`.
 
-Study 1: a second policy class on the same data, image size, cameras and seeds, to see
+Study 1, M5c C3: a second policy class on the same data, image size, cameras and seeds, to see
 whether the renderer gap is specific to ACT. It reuses `ACTEpisodeDataset` (one sample = one
 timestep with the next `horizon` actions) and adds the previous frame as the second
 observation step. The checkpoint folder has the same layout as `train_act.py`'s, with
 `algorithm: diffusion` in `training_meta.json`, so `--policy lerobot --checkpoint DIR` loads it.
 
-    python research/imitation_learning/train_diffusion.py --dataset data/randomized_v1 \
-        --steps 100000 --lr 1e-4 --num-workers 0 --seed 0 --out outputs/dp_200
+    python research/imitation_learning/train_diffusion.py --dataset data/study01/v1/mujoco_nominal_200_seeds0-199 \
+        --steps 100000 --lr 1e-4 --num-workers 0 --seed 0 --out outputs/study01/m5c/dp_200
 
-This script follows LeRobot's Diffusion Policy defaults: DDPM with 100 inference steps, state and
+Version 2 (this file) follows LeRobot's Diffusion Policy defaults: DDPM with 100 inference steps, state and
 action normalized min-max to [-1, 1] with sample clipping, the AdamW and cosine-with-warm-up presets of the
-config, horizon 64 (the original's default is 16; 64 is LeRobot's) so that the policy reads the cameras about as
+config, horizon 64 (default 16 in the original; 64 is LeRobot's) so that the policy reads the cameras about as
 rarely as ACT does, the padded end of an episode masked out of the loss, and an exponential moving average
 of the weights as in the original Diffusion Policy (`diffusers.training_utils.EMAModel`, power 0.75, at most
 0.9999), which is what the saved checkpoint holds. What still differs from the original: batch 16 against 64
 (6 GB), 128 px images cropped to 112, two cameras, ImageNet-pretrained ResNet18 with BatchNorm, and the 200 or 400
-demonstrations of the study. The U-Net widths are 256/512/1024 (`--unet-width 256`, 89M parameters at horizon 16):
-LeRobot's 512/1024/2048 trains in 6 GB without the weight average (5.24 GiB peak at batch 16), but with it the
-extra copy of the weights overflows the GPU memory and training falls to 0.6 steps/s (measured), so the study's
-runs use 256.
+demonstrations of the study. Version 1 (git history: `ba637f0`) used a constant learning rate, no averaging,
+mean/std normalization without clipping, horizon 16 and DDIM with 10 steps; its two checkpoints
+(`dp_200`, `dp_visual_dr`) are kept for the record. The U-Net widths are 256/512/1024 (`--unet-width 256`, 89M parameters at horizon 16): LeRobot's 512/1024/2048
+trains in 6 GB without the weight average (5.24 GiB peak at batch 16, `outputs/study01/v1/scripts/run_c3.sh`), but with
+it the extra copy of the weights overflows the GPU memory and training falls to 0.6 steps/s (measured), so the
+study's runs of version 2 use 256.
 
 Research module: nothing in `src/physai` imports it.
 """

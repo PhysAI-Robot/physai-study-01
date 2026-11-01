@@ -62,6 +62,9 @@ class ExpertConfig:
     max_joint_rate: float = 1.2
     approach_rate: float = 0.5
     gripper_rate: float = 0.9
+    # Gripper speed below which it counts as settled. 0.05 is rad/s for the SO-101;
+    # a robot whose gripper joint is in metres (the ViperX 300 S) needs a far smaller one.
+    gripper_velocity_tol: float = 0.05
 
 
 class SO101PickPlaceExpert(Policy):
@@ -280,7 +283,8 @@ class SO101PickPlaceExpert(Policy):
         grip_vel = abs(float(observation.joint_state.velocity[self._gripper_index]))
         ramp_done = abs(self._grip - grip_goal) < 1e-6
         gripper_settled = ramp_done and (
-            abs(grip_now - self._grip) < 0.06 or grip_vel < 0.05
+            abs(grip_now - self._grip) < 0.06
+            or grip_vel < self.cfg.gripper_velocity_tol
         )
 
         self._phase_steps += 1

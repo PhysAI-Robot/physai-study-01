@@ -2,10 +2,10 @@
 
 Uses the real `lerobot` ACTPolicy/ACTConfig — every input/output shape and key
 name was verified against the installed library before this script was
-written, not guessed from memory.
+written (see conversation history / commit message), not guessed from memory.
 
-    python scripts/eval_policy.py --manifest research/configs/so101_randomized_pick_place.yaml --policy scripted --seed 0 --episodes 200 --save-dataset data/randomized_v1
-    python research/imitation_learning/train_act.py --dataset data/randomized_v1 --steps 60000 --chunk-size 100
+    python research/scripts/collect_demos.py --manifest research/configs/so101_randomized_pick_place.yaml --episodes 200 --dataset data/study01/v1/mujoco_nominal_200_seeds0-199
+    python research/imitation_learning/train_act.py --dataset data/study01/v1/mujoco_nominal_200_seeds0-199 --steps 60000 --chunk-size 100
 
 Chosen over SmolVLA for this hardware: SmolVLA carries a VLM backbone and
 needs far more than 4 GB of VRAM to fine-tune. ACT is the standard
@@ -146,6 +146,9 @@ def main() -> int:
         persistent_workers=args.num_workers > 0,
     )
 
+    # The robot's own joint count: 6 for the SO-101, 7 for the ViperX 300 S (six joints and the gripper).
+    state_dim = meta["features"]["observation.state"]["shape"][0]
+    action_dim = meta["features"]["action"]["shape"][0]
     H = W = args.image_size
     input_features = {
         "observation.images.front": PolicyFeature(
@@ -154,9 +157,11 @@ def main() -> int:
         "observation.images.wrist": PolicyFeature(
             type=FeatureType.VISUAL, shape=(3, H, W)
         ),
-        "observation.state": PolicyFeature(type=FeatureType.STATE, shape=(6,)),
+        "observation.state": PolicyFeature(type=FeatureType.STATE, shape=(state_dim,)),
     }
-    output_features = {"action": PolicyFeature(type=FeatureType.ACTION, shape=(6,))}
+    output_features = {
+        "action": PolicyFeature(type=FeatureType.ACTION, shape=(action_dim,))
+    }
 
     cfg = ACTConfig(
         input_features=input_features,
