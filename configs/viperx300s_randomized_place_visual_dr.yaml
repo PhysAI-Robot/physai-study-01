@@ -1,12 +1,12 @@
 # ViperX 300 S randomized pick-and-place with a randomized look, for the scripted expert and for
-# study 01 V2 / N4 (a second robot with front + wrist cameras).
+# study 01 (a second robot with front + wrist cameras).
 # Fetch the model once:  python scripts/fetch_assets.py --robot viperx300s
 # Run it with:           python scripts/run_sim.py --manifest research/configs/viperx300s_single_cube_randomized_place.yaml --policy scripted --serve
 schema_version: 1
 
 plugins: [research.plugin]
 
-# Randomized look (V2 N4): the same ranges as the SO-101's `so101_randomized_pick_place_visual_dr.yaml`, fixed here
+# Randomized look: the same ranges as the SO-101's `so101_randomized_pick_place_visual_dr.yaml`, fixed here
 # before any ViperX training so the two robots' recipes match. Everything else is the nominal task.
 simulation:
   seed: 0

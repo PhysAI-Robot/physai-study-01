@@ -1,4 +1,4 @@
-"""N12 pilot: does the sensitivity S of a model to edits on MuJoCo rank its MuJoCo-minus-Isaac Sim loss? (python outputs/study01/v2/n12_analyse.py)
+"""N12 pilot: does the sensitivity S of a model to edits on MuJoCo rank its MuJoCo-minus-Isaac Sim loss? (python research/experiments/n12_analyse.py)
 
 S (primary) = mean fall in points of the success under blur, lighting 0.5, lighting 1.4 and a 10 mm camera shift (four edits both robots take), unedited minus edited on the
 same 100 seeds. S7 = the same over the seven edits (SO-101 models only). Loss = MuJoCo (unedited, same seeds) minus Isaac Sim on seeds 1000-1099, in points.
@@ -8,8 +8,10 @@ import json, os
 import numpy as np
 from scipy.stats import spearmanr
 
-V2 = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(V2, "n12")
+STUDY = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..", "outputs", "study01"
+)
+OUT = os.path.join(STUDY, "n12")
 EDITS4 = ["blur", "light05", "light14", "cam10"]
 EDITS7 = EDITS4 + ["arm_tint", "bg_dim", "plain"]
 
@@ -30,7 +32,9 @@ def perm_p(x, y, n=20000, seed=0):
 
 
 rows = []
-for m in json.load(open(os.path.join(V2, "n12_models.json"))):
+for m in json.load(
+    open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "n12_models.json"))
+):
     base = score(m["name"], "none")
     falls = (
         {

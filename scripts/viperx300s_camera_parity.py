@@ -1,4 +1,4 @@
-"""Do the ViperX front and wrist cameras see the same scene on every engine? (study 1, V2 N0 gate b)
+"""Do the ViperX front and wrist cameras see the same scene on every engine? (study 1)
 
     python research/scripts/viperx300s_camera_parity.py --dump mujoco --out outputs/study01/v2/cams_mujoco.npz
     OMNI_KIT_ACCEPT_EULA=YES python research/scripts/viperx300s_camera_parity.py --dump isaac --out outputs/study01/v2/cams_isaac.npz

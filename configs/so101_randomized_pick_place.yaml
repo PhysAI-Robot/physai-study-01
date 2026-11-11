@@ -1,4 +1,4 @@
-# Study 1's frozen task (research/studies/01_randomized_pick_place.md): cube and
+# Study 1's frozen task: cube and
 # target pad both random over the reachable top-down region of
 # scripts/workspace_map.py, at least 8 cm apart.
 # Run it with: python scripts/run_sim.py --manifest research/configs/so101_randomized_pick_place.yaml

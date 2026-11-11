@@ -1,4 +1,4 @@
-"""The `lerobot` policy: runs a LeRobot checkpoint (ACT or Diffusion Policy) in the loop.
+"""The `lerobot` policy: runs a LeRobot checkpoint (ACT, Diffusion Policy or SmolVLA) in the loop.
 
 Nothing here imports torch at module scope. A checkpoint trained with `train_act.py` or
 `train_diffusion.py` on demonstrations from `scripts/collect_demos.py` loads with `--checkpoint`.
@@ -90,6 +90,11 @@ class LeRobotPolicy(VLAPolicy):
                 DiffusionPolicy as PolicyClass,
                 make_diffusion_pre_post_processors as make_pre_post,
             )
+        elif algorithm == "smolvla":
+            from lerobot.policies.smolvla import (
+                SmolVLAPolicy as PolicyClass,
+                make_smolvla_pre_post_processors as make_pre_post,
+            )
         else:
             from lerobot.policies.act import (
                 ACTPolicy as PolicyClass,
@@ -97,7 +102,11 @@ class LeRobotPolicy(VLAPolicy):
             )
         policy = PolicyClass.from_pretrained(checkpoint_dir).to(device)
         policy.eval()
-        if algorithm == "act":
+        if algorithm == "smolvla":
+            n_steps = kw.pop("n_action_steps", None)
+            if n_steps is not None:
+                policy.config.n_action_steps = int(n_steps)
+        elif algorithm == "act":
             _set_execution(
                 policy,
                 n_action_steps=kw.pop("n_action_steps", None),

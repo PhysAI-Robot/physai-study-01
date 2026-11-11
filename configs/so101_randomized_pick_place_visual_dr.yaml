@@ -1,6 +1,6 @@
 # Study 1's randomized task with the MuJoCo look randomized each episode (robot, table and
 # floor colours, floor tile size, lighting), for collecting demonstrations that a policy
-# trains on (research/studies/01_randomized_pick_place.md, M5). Physics, the cube and the
+# trains on. Physics, the cube and the
 # target keep their nominal values; evaluation uses so101_randomized_pick_place.yaml.
 # The ranges are broad around nominal and were not fitted to Isaac Sim's measured differences.
 schema_version: 1

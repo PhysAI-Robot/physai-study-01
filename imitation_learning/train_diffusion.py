@@ -45,7 +45,7 @@ from diffusers.training_utils import EMAModel  # noqa: E402
 from torch.utils.data import DataLoader, Dataset  # noqa: E402
 
 from physai.data import CheckpointMetadata  # noqa: E402
-from research.imitation_learning.act_dataset import ACTEpisodeDataset  # noqa: E402
+from research.imitation_learning.act_dataset import ACTEpisodeDataset, keep_snapshot  # noqa: E402
 
 
 class WithPreviousFrame(Dataset):
@@ -88,6 +88,12 @@ def main() -> int:
     ap.add_argument("--lr", type=float, default=1e-4)
     ap.add_argument("--log-every", type=int, default=50)
     ap.add_argument("--save-every", type=int, default=1000)
+    ap.add_argument(
+        "--keep-every",
+        type=int,
+        default=0,
+        help="also copy the checkpoint to OUT/step_NNNNNN every N steps (a multiple of --save-every)",
+    )
     ap.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     ap.add_argument("--num-workers", type=int, default=0)
     ap.add_argument("--seed", type=int)
@@ -256,6 +262,11 @@ def main() -> int:
             ema.copy_to(policy.parameters())
             policy.save_pretrained(args.out)
             ema.restore(policy.parameters())
+            if args.keep_every and step % args.keep_every == 0:
+                (args.out / "training_log.json").write_text(
+                    json.dumps(history, indent=2), encoding="utf-8"
+                )
+                keep_snapshot(args.out, step)
     (args.out / "training_log.json").write_text(
         json.dumps(history, indent=2), encoding="utf-8"
     )

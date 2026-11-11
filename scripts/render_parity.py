@@ -1,4 +1,4 @@
-"""Do two renderers draw the same scene? A check to run before scores from two engines are compared (study 1, V2 N10).
+"""Do two renderers draw the same scene? A check to run before scores from two engines are compared (study 1).
 
     python research/scripts/render_parity.py poses --manifest M --out poses.npz
     python research/scripts/render_parity.py dump  --manifest M --poses poses.npz --engine mujoco|newton|newton:old|isaac --out E.npz

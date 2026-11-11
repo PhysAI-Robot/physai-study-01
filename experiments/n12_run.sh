@@ -1,8 +1,8 @@
 #!/bin/bash
 # V2 N12 pilot: one worker. usage: n12_run.sh WORKER NWORKERS [EPISODES]. Each model of n12_models.json (index mod NWORKERS == WORKER) is scored on MuJoCo,
 # seeds 1000-1099, unedited and under the edits fixed in the study file; finished runs are skipped.
-cd "$(dirname "$0")/../../.."
-V2=outputs/study01/v2; W=$1; N=$2; EP=${3:-100}; OUT=${N12_OUT:-$V2/n12}; LIST=${N12_MODELS:-$V2/n12_models.json}
+cd "$(dirname "$0")/../.."
+STUDY=outputs/study01; W=$1; N=$2; EP=${3:-100}; OUT=${N12_OUT:-$STUDY/n12}; LIST=${N12_MODELS:-research/experiments/n12_models.json}
 SO=research/configs/so101_randomized_pick_place.yaml; PLAIN=research/configs/so101_randomized_pick_place_plainfloor.yaml; VX=research/configs/viperx300s_single_cube_randomized_place.yaml
 mkdir -p $OUT/logs
 python -c "

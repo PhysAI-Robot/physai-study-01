@@ -1,10 +1,12 @@
 """N13: MuJoCo minus IM-cell difference (P) against MuJoCo minus Isaac Sim (G), pooled over the two nominal models, bars of the study file
-(python outputs/study01/v2/n13_analyse.py)."""
+(python research/experiments/n13_analyse.py)."""
 
 import glob, json, os
 from math import comb
 
-V2 = os.path.dirname(os.path.abspath(__file__))
+STUDY = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..", "outputs", "study01"
+)
 
 
 def episodes(files):
@@ -30,20 +32,20 @@ def mcnemar(b, c):  # exact, two-sided
 
 MODELS = {  # name: (MuJoCo per-seed file, Isaac Sim own run)
     "act_nominal_seed1": (
-        "../v1/experiments/e5/seed1_mujoco.json",
+        "experiments/e5/seed1_mujoco.json",
         "isaac_n2/bridge_act_nominal_seed1",
     ),
     "act_nominal_seed2": (
-        "../v1/experiments/e5/seed2_mujoco.json",
+        "experiments/e5/seed2_mujoco.json",
         "isaac_n2/bridge_act_nominal_seed2",
     ),
 }
 G = L = Lmi = 0
 for name, (mj_file, isaac_dir) in MODELS.items():
-    mj = episodes([os.path.join(V2, mj_file)])
-    isa = episodes(shards(os.path.join(V2, isaac_dir)))
-    cell = episodes(shards(os.path.join(V2, "n13", name)))
-    mi = episodes(shards(os.path.join(V2, "n9", name)))
+    mj = episodes([os.path.join(STUDY, mj_file)])
+    isa = episodes(shards(os.path.join(STUDY, isaac_dir)))
+    cell = episodes(shards(os.path.join(STUDY, "n13", name)))
+    mi = episodes(shards(os.path.join(STUDY, "n9", name)))
     if len(cell) < 100:
         print(f"{name}: cell not finished ({len(cell)} seeds)")
         continue
@@ -63,9 +65,9 @@ if G:
         f"pooled: G {G}, P {L}, P/G {L / G:.2f}, (MI cell of N9: L {Lmi}, L/G {Lmi / G:.2f}) (bars: P >= 0.25 G Isaac Sim's side carries a part alone; P <= 0.1 G nothing alone; else partial)"
     )
 # consistency check, no bar: the randomized-look model (training seed 0)
-mj = episodes([os.path.join(V2, "n9/randlook_seed0_mujoco_1000-1099.json")])
-isa = episodes(shards(os.path.join(V2, "isaac_n1/randlook_seed0")))
-cell = episodes(shards(os.path.join(V2, "n13/act_randomized_look_seed0")))
+mj = episodes([os.path.join(STUDY, "n9/randlook_seed0_mujoco_1000-1099.json")])
+isa = episodes(shards(os.path.join(STUDY, "isaac_n1/randlook_seed0")))
+cell = episodes(shards(os.path.join(STUDY, "n13/act_randomized_look_seed0")))
 lost = sum(mj[k] and not cell[k] for k in mj)
 gained = sum(cell[k] and not mj[k] for k in mj)
 ci = sum(cell[k] and not isa[k] for k in mj)

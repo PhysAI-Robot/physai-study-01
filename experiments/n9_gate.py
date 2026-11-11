@@ -1,9 +1,9 @@
 """V2 N9 gate: first frames of seeds 1000-1004 in three cells, then the check of the study file.
 
-    OMNI_KIT_ACCEPT_EULA=YES python outputs/study01/v2/n9_gate.py dump isaac_own n9/gate_isaac_own.npz
-    OMNI_KIT_ACCEPT_EULA=YES python outputs/study01/v2/n9_gate.py dump cell n9/gate_cell.npz     # --sim mujoco --render isaac
-    python outputs/study01/v2/n9_gate.py dump mujoco n9/gate_mujoco.npz
-    python outputs/study01/v2/n9_gate.py check n9/gate_isaac_own.npz n9/gate_cell.npz n9/gate_mujoco.npz
+    OMNI_KIT_ACCEPT_EULA=YES python research/experiments/n9_gate.py dump isaac_own n9/gate_isaac_own.npz
+    OMNI_KIT_ACCEPT_EULA=YES python research/experiments/n9_gate.py dump cell n9/gate_cell.npz     # --sim mujoco --render isaac
+    python research/experiments/n9_gate.py dump mujoco n9/gate_mujoco.npz
+    python research/experiments/n9_gate.py check n9/gate_isaac_own.npz n9/gate_cell.npz n9/gate_mujoco.npz
 
 Gate (fixed in the study file before any run): cube and target pixels of the front camera agree between the cell and Isaac Sim's own run to 1 px,
 and the robot pose agrees with MuJoCo's (qpos of the cell equal to MuJoCo's; the arm silhouette of the cell equal to Isaac Sim's own).
@@ -35,6 +35,11 @@ if sys.argv[1] == "dump":
         "mujoco": dict(simulator="mujoco"),
         "im": dict(simulator="isaac", renderer="mujoco"),
     }[cell]  # im: N13, Isaac Sim physics drawn by MuJoCo
+    if os.environ.get("GATE_CUBE_START") and cell in (
+        "cell",
+        "mujoco",
+    ):  # P1: the cube start of Isaac Sim's run (table file)
+        kw["robot_config"] = {"cube_start": os.environ["GATE_CUBE_START"]}
     manifest = with_overrides(
         load_manifest(MANIFEST), policy="idle", max_steps=10, **kw
     )

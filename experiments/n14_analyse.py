@@ -1,9 +1,11 @@
-"""N14: the ViperX repeat of N9 / N13, seeds 1000-1299, pooled over the two nominal models (python outputs/study01/v2/n14_analyse.py)."""
+"""N14: the ViperX repeat of N9 / N13, seeds 1000-1299, pooled over the two nominal models (python research/experiments/n14_analyse.py)."""
 
 import glob, json, os
 from math import comb
 
-V2 = os.path.dirname(os.path.abspath(__file__))
+STUDY = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..", "outputs", "study01"
+)
 
 
 def episodes(files):
@@ -30,13 +32,13 @@ def mcnemar(b, c):  # exact, two-sided
 tot = {"G": 0, "mi": 0, "im": 0}
 have = {"mi": True, "im": True}
 for m in ("nominal_seed1", "nominal_seed2"):
-    mj = episodes([os.path.join(V2, f"n4/{m}_mujoco.json")])
-    isa = episodes(shards(os.path.join(V2, f"isaac_n4/{m}")))
+    mj = episodes([os.path.join(STUDY, f"n4/{m}_mujoco.json")])
+    isa = episodes(shards(os.path.join(STUDY, f"isaac_n4/{m}")))
     g = sum(mj.values()) - sum(isa.values())
     tot["G"] += g
     line = f"{m}: MuJoCo {sum(mj.values())}, Isaac Sim {sum(isa.values())}, G {g}"
     for cell in ("mi", "im"):
-        c = episodes(shards(os.path.join(V2, f"n14/{cell}/{m}")))
+        c = episodes(shards(os.path.join(STUDY, f"n14/{cell}/{m}")))
         if len(c) < 300:
             have[cell] = False
             line += f"; {cell.upper()} not finished ({len(c)} seeds)"

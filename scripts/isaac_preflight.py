@@ -9,8 +9,7 @@ again after `--wait` seconds, up to `--tries` times. Exit code 0 means a start d
 that none of the tries did. Each try is appended to `--log` with the time, the minutes since the
 machine booted and whether the start was a glitch, so the rate of the startup glitch and its
 dependence on a warm-up (after a reboot or an update, before and after a first light run) can be
-read back (hypothesis to test: a light start first removes the glitch, see
-`research/classical_control/FINDINGS.md`, Isaac render glitch).
+read back (hypothesis to test: a light start first removes the glitch).
 
 Research module: nothing in `src/physai` imports it.
 """

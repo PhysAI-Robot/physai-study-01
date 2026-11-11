@@ -1,5 +1,5 @@
 # ViperX 300 S randomized pick-and-place, for the scripted expert and for
-# study 01 V2 / N4 (a second robot with front + wrist cameras).
+# study 01 (a second robot with front + wrist cameras).
 # Fetch the model once:  python scripts/fetch_assets.py --robot viperx300s
 # Run it with:           python scripts/run_sim.py --manifest research/configs/viperx300s_single_cube_randomized_place.yaml --policy scripted --serve
 schema_version: 1

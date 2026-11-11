@@ -2,42 +2,37 @@
 
 Code to reproduce study 1 of [physai-robot-starter](https://github.com/PhysAI-Robot/physai-robot-starter):
 randomized SO-101 and ViperX 300 S pick-and-place, and how much of a policy's loss between two simulators is the
-renderer's. It holds the scripted experts, the camera-only visual servo, the ACT and Diffusion Policy training and
+renderer's. It holds the scripted experts, the camera-only visual servo, the ACT, Diffusion Policy and SmolVLA training and
 evaluation code, the probes and the checks, and the manifests. Nothing else: checkpoints and data are on Hugging Face.
 
-Two tags: `study-01-v1` is the first version of the study (SO-101, three engines); `study-01-v2` adds the ViperX 300 S,
-the physics-by-renderer cells, and the checks of the paper's diagnostic ladder. `study-01-v2` includes everything of v1.
+The Isaac Sim numbers of the study were all scored on one stack, Isaac Sim 6.2.0.0.
 
 | Part | Where |
 | --- | --- |
 | scripted experts (privileged state, collect demonstrations): SO-101 and ViperX 300 S | `scripted_experts/` |
 | visual servo (camera only) | `classical_control/` |
-| ACT and Diffusion Policy: dataset, training, loading, probes | `imitation_learning/` |
+| ACT, Diffusion Policy and SmolVLA: dataset, training, loading, probes | `imitation_learning/` |
 | task manifests (randomized pick-and-place, floor variants, randomized look; SO-101 and ViperX 300 S) | `configs/` |
-| camera comparison between simulators, render-parity check, ViperX checks, pad-visible wrapper, workspace success maps | `scripts/` |
-| the queues, gates and analyses of the numbered items N9 to N14 of the second part, as they were run | `experiments/` |
-| the scripts that wrote the Hugging Face release (model card, per-seed results, checkpoint folders) | `scripts/build_model_card.py`, `scripts/stage_*.py` |
+| camera comparison between simulators, render-parity check, ViperX checks, pad-visible wrapper, workspace success maps, cube-start table (`cube_start_table.py`) | `scripts/` |
+| the queues, gates and analyses that produced the numbers of the study, as they were run, with the cube-start tables they read | `experiments/` |
 | tests | `tests/` |
 
 ## Setup
 
 This repository is a plugin of the framework: it must be checked out as the folder `research/` inside a clone of
 the framework at the version it was run with (a manifest loads it with `plugins: [research.plugin]`). Both
-repositories carry the tags `study-01-v1` and `study-01-v2`; use `study-01-v2` for everything below (the tests and
-the ViperX parts need it):
+repositories carry the tag `study-01-v3`; check both out at it:
 
 ```bash
-git clone --branch study-01-v2 https://github.com/PhysAI-Robot/physai-robot-starter
-git clone --branch study-01-v2 https://github.com/PhysAI-Robot/physai-study-01 physai-robot-starter/research
+git clone --branch study-01-v3 https://github.com/PhysAI-Robot/physai-robot-starter
+git clone --branch study-01-v3 https://github.com/PhysAI-Robot/physai-study-01 physai-robot-starter/research
 cd physai-robot-starter
-uv sync                                           # MuJoCo, Newton, ACT and Diffusion Policy; add --extra isaac for Isaac Sim
+uv sync                                           # MuJoCo, Newton, ACT and Diffusion Policy; add --extra isaac for Isaac Sim, --extra smolvla for SmolVLA
 uv run python scripts/fetch_assets.py --robot so101
 uv run python scripts/fetch_assets.py --robot viperx300s
 ```
 
-At `study-01-v1` the training stack was an extra (`uv sync --extra training`) and Newton needed its own Python
-(`imitation_learning/newton_eval.py`, kept for that version); at `study-01-v2` both come with `uv sync`, and any
-simulator pairs with any renderer through `--sim` and `--render`.
+Any simulator pairs with any renderer through `--sim` and `--render`.
 
 Seeds: demonstrations use episode seeds 0-199 (200 demos) or 0-399 (400 demos); settings are chosen on 900-999;
 every reported score uses 1000-1299 (1000-1099 on Isaac Sim) and never the demonstration seeds.
@@ -98,7 +93,7 @@ uv run python research/imitation_learning/train_act.py --dataset data/randomized
   --chunk-size 100 --steps 120000 --num-workers 0 --out outputs/act_both_renderers
 ```
 
-Newton as the renderer (`study-01-v1` used `newton_eval.py` for this), a one-colour or shifted floor, and clutter:
+Newton as the renderer, a one-colour or shifted floor, and clutter:
 
 ```bash
 uv run python scripts/eval_policy.py --manifest $M --render newton --policy lerobot --checkpoint outputs/act_nominal --seed 1000 --episodes 300
@@ -106,7 +101,17 @@ uv run python scripts/eval_policy.py --manifest research/configs/so101_randomize
 uv run python scripts/sweep_difficulty.py --policy lerobot --checkpoint outputs/act_nominal --manifest $M --seed 1000 --episodes 100
 ```
 
-**Where a loss comes from: the physics-by-renderer cells, the ViperX 300 S, and the checks (`study-01-v2`).**
+SmolVLA (`uv sync --extra smolvla`; fine-tunes `lerobot/smolvla_base` with the vision-language model frozen and plays
+its 50-action chunk in full; the recipe of the paper is 20,000 steps, batch 64 as 2 x 32 in float32, picture size 256; `--steps 40000`
+gives the longer runs; the 400 demonstrations are two datasets of 200, collected as above with `--seed 0` and `--seed 200`):
+
+```bash
+uv run python research/imitation_learning/train_smolvla.py --dataset data/nominal_a data/nominal_b --steps 20000 --batch-size 64 --accum 2   --model-image-size 256 --seed 1 --log-every 100 --save-every 2000 --out outputs/smolvla_nominal_seed1
+uv run python scripts/eval_policy.py --manifest $M --policy lerobot --checkpoint outputs/smolvla_nominal_seed1 --episodes 300 --seed 1000 --json outputs/smolvla_mujoco.json
+# fewer actions per chunk: --policy-arg n_action_steps=25
+```
+
+**Where a loss comes from: the physics-by-renderer cells, the ViperX 300 S, and the checks.**
 
 Every evaluation takes `--sim` (the physics: `mujoco`, `isaac`, `newton`) and `--render` (the engine that draws the
 cameras; default: the simulator's own). A cell is one pairing. The four cells of MuJoCo and Isaac Sim, for one model:
@@ -153,31 +158,47 @@ uv run python scripts/eval_policy.py --manifest $V --policy lerobot --checkpoint
 The same cells apply (`--sim isaac --render mujoco` and so on). `viperx300s_visibility.py` counts the cube's and the
 target's pixels in the ViperX cameras; `viperx300s_diag.py` is a short diagnostic of the expert.
 
-The numbered items of the second part that score the cells and the checks (`experiments/`; copy the folder to `outputs/study01/v2/` of the
-framework, where the scripts find each other and write their results; the checkpoints are the Hugging Face ones): `n9_*` is the MuJoCo-physics, Isaac-pictures
-cell (a gate on the first frames, a queue of 10-episode shards, the analysis against the bars of the study), `n13_*` the
-Isaac-physics, MuJoCo-pictures cell, `n14_*` the ViperX repeat of both, `n11_queue.sh` the Newton controls and `n12_*` the
-sensitivity pilot. The gate is `n9_gate.py` (`dump` the cell's frames, then `check` or `check_im`); Isaac Sim exits without writing
-its file when it hits the start-up render glitch, so the queues test for the file and repeat.
+`experiments/` holds the queues, gates and analyses that produced the numbers of the study, as they ran. Run them from the framework root
+(`bash research/experiments/o1_queue.sh`, `python research/experiments/o1_analyse.py`): they find each other in `research/experiments/` and
+read and write their results in `outputs/study01/` (logs in `outputs/study01/logs/`) and `data/study01/`. The datasets they train on are expected
+there under the names the scripts use (`data/study01/mujoco_nominal_200_seeds0-199`, `mujoco_nominal_200_seeds200-399`,
+`mujoco_randomized-look_400_seeds0-399`, and the probe sets of `p_probes62.sh` and `q1_eh.sh`), collected with the commands above; the
+checkpoints are the Hugging Face ones, so change a local `--checkpoint` path to `hf:rizgiak/physai-study-01-checkpoints/<folder>`.
+By prefix:
+
+- `n9_*`: MuJoCo physics with Isaac Sim's pictures (a gate on the first frames, `n9_gate.py` with `dump` and then `check` or `check_im`; a queue of
+  10-episode shards; the analysis against the bars of the study); `n13_*` the Isaac-physics, MuJoCo-pictures cell; `n14_*` the ViperX repeat of both;
+  `n11_queue.sh` the Newton controls; `n12_*` the sensitivity pilot.
+- `p1_*`: where Isaac Sim puts the cube, and the cells scored with that start (the `cube_*.json` and `cube_start_*.json` tables are what they read and
+  write); `cube_start_table.py` in `scripts/` measures it.
+- `o0_fit*.sh`: the memory test of the SmolVLA recipe; `o1_*`: the six SmolVLA fine-tunes and their ladder of cells (`o1_queue.sh` and its restarts
+  `o1_queue2.sh`, `o1_tail.sh`, `o1_im_randlook.sh`; `o1_analyse.py`, `shares_ci.py`).
+- `q1_*`: the re-score of the Isaac Sim numbers on Isaac Sim 6.2.0.0; `p_probes62.sh` and `q2b_*`: the first-frame swap, the feature shift and the
+  image statistics.
+- `t1_part1.sh`, `t1_part2.sh`, `t1g_act_lr.sh`, `t1p2_analyse.py`: the tuning search (training and validation, the four SmolVLA checkpoints on
+  the test seeds, the last ACT learning-rate run).
+
+Isaac Sim exits without writing its file when it hits the start-up render glitch, so the queues test for the file and repeat;
+`eval_policy_sharded.py` repeats such a shard.
 
 Probes of what the policy reads: `imitation_learning/image_edits.py` (`--policy-arg image_edit=...`),
 `state_edits.py`, `read_probe.py`, `feature_shift.py`; each module's docstring has its command.
 
 ## Checkpoints and data
 
-- Checkpoints, 34 models (26 ACT and 4 Diffusion Policy on the SO-101, 4 ACT on the ViperX 300 S) with their scores,
-  training seeds and, in `results/<checkpoint>/` (index: `results/INDEX.tsv`), the per-seed success lists the paired tests are
-  computed from, for every score of both parts and for the cells and checks of the second part:
-  [rizgiak/physai-study-01-checkpoints](https://huggingface.co/rizgiak/physai-study-01-checkpoints). Use one
+- Checkpoints, 45 models (27 ACT and 4 Diffusion Policy on the SO-101, 4 ACT on the ViperX 300 S, 10 SmolVLA) with their scores, training seeds and, in
+  `results/<checkpoint>/` (index: `results/INDEX.tsv`), the per-seed success lists the paired tests are computed from, for every score of the study.
+  It also publishes the per-seed validation files (MuJoCo seeds 900-999) of runs whose weights are not published, and the colour-jitter ACT model
+  of the image-edit probes: [rizgiak/physai-study-01-checkpoints](https://huggingface.co/rizgiak/physai-study-01-checkpoints). Use one
   directly: `--checkpoint hf:rizgiak/physai-study-01-checkpoints/act_randomized_look_seed0@e9cdc9feb6f1093cc65890d04a33e21031e52775`
   (downloaded into `checkpoints/`; `scripts/fetch_checkpoints.py` downloads ahead of time).
-- The Isaac Sim replays of v1 (400 episodes): [rizgiak/physai-study-01-isaac-replays](https://huggingface.co/datasets/rizgiak/physai-study-01-isaac-replays).
+- The Isaac Sim replays (400 episodes): [rizgiak/physai-study-01-isaac-replays](https://huggingface.co/datasets/rizgiak/physai-study-01-isaac-replays).
   The MuJoCo demonstrations are regenerated with the `--save-dataset` commands above.
 
 ## Notes
 
 - A 6 GB laptop GPU is enough; the ViperX models were trained on the same one. Approximate times on one: ACT 200 demos 60k steps about 2 h, Diffusion Policy 100k steps
-  about 3.6 h, a 300-episode MuJoCo evaluation 20 min (ACT) to 2 h (Diffusion Policy).
+  about 3.6 h, SmolVLA 20k steps about 6.2 h (peak 4.6 GB; 40k steps about 12.5 h), a 300-episode MuJoCo evaluation 20 min (ACT) to 2 h (Diffusion Policy).
 - MuJoCo evaluations of ACT repeat step for step on the same versions; Diffusion Policy evaluations and every Isaac
   Sim run reproduce only within sampling noise.
 

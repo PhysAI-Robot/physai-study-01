@@ -30,7 +30,7 @@ import torch
 from torch.utils.data import DataLoader
 
 from physai.data import CheckpointMetadata
-from research.imitation_learning.act_dataset import ACTEpisodeDataset
+from research.imitation_learning.act_dataset import ACTEpisodeDataset, keep_snapshot
 
 
 def main() -> int:
@@ -60,6 +60,12 @@ def main() -> int:
     ap.add_argument("--lr", type=float, default=1e-5)
     ap.add_argument("--log-every", type=int, default=50)
     ap.add_argument("--save-every", type=int, default=1000)
+    ap.add_argument(
+        "--keep-every",
+        type=int,
+        default=0,
+        help="also copy the checkpoint to OUT/step_NNNNNN every N steps (a multiple of --save-every)",
+    )
     ap.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     ap.add_argument("--num-workers", type=int, default=2)
     ap.add_argument(
@@ -262,6 +268,11 @@ def main() -> int:
             # reloaded config + these saved stats instead of trying to persist
             # the pipeline objects themselves.
             policy.save_pretrained(args.out)
+            if args.keep_every and step % args.keep_every == 0:
+                (args.out / "training_log.json").write_text(
+                    json.dumps(history, indent=2), encoding="utf-8"
+                )
+                keep_snapshot(args.out, step)
 
     (args.out / "training_log.json").write_text(
         json.dumps(history, indent=2), encoding="utf-8"

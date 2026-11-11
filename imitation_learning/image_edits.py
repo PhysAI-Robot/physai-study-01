@@ -20,7 +20,7 @@ GRAY = 128
 
 # Mean colour ratio Isaac Sim / MuJoCo per region of the front camera, and a per-channel
 # gain for the wrist camera, measured on the two renders of one scene at one arm pose
-# (`scripts/compare_cameras.py --dump`; see FINDINGS, M4).
+# (`scripts/compare_cameras.py --dump`).
 FRONT_GAINS = {
     "background": (0.67, 0.70, 0.67),
     "table": (0.93, 0.94, 0.93),

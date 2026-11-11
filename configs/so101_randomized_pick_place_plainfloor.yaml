@@ -1,5 +1,5 @@
 # Study 1's randomized task with a one-colour floor instead of the checker, to test whether
-# a camera policy reads the tile pattern (research/studies/01_randomized_pick_place.md, M5).
+# a camera policy reads the tile pattern.
 # MuJoCo only; the benchmark itself keeps the checker (so101_randomized_pick_place.yaml).
 schema_version: 1
 

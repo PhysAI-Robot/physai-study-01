@@ -251,3 +251,15 @@ class ACTEpisodeDataset(Dataset):
             std = stacked.std(axis=(0, 2, 3)) + 1e-6
             per_key[key] = {"mean": mean.tolist(), "std": std.tolist()}
         return DatasetStats(per_key)
+
+
+def keep_snapshot(out: Path, step: int) -> Path:
+    """Copy the checkpoint files now in `out` to `out/step_NNNNNN`, so a later save does not overwrite them (`--keep-every`)."""
+    import shutil
+
+    target = out / f"step_{step:06d}"
+    target.mkdir(exist_ok=True)
+    for path in out.iterdir():
+        if path.is_file():
+            shutil.copy2(path, target / path.name)
+    return target
