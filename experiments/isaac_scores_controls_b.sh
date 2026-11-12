@@ -4,7 +4,7 @@
 #   E  replay of the expert's actions (seeds 0-49), replay of the MuJoCo actions of act_nominal_unseeded (seeds 900-999; the dataset is the MuJoCo rollouts of act_nominal_unseeded in data/study01/probe_act_reads_mujoco/act200_mujoco, see read_probe.py)
 #   F  validation seeds 900-999 of act_nominal_unseeded (base) and of the jitter model
 #   G  act_nominal_unseeded with 50 and 25 actions per chunk, 1000-1099
-#   H  diffusion_policy_v2_randomized_look_seed0 (16 actions per chunk as before), 1000-1099
+#   H  diffusion_policy_randomized_look_seed0 (16 actions per chunk as before), 1000-1099
 # If a shard does not produce its merged.json, the queue STOPS and logs it; nothing is fixed on the way.
 # Start it with the full path of Git's bash.exe on Windows (plain "bash" in PowerShell is WSL, which has no uv). Feeds the replay controls, the validation of the base ACT and the chunk table.
 export PATH="/usr/bin:/bin:$HOME/.local/bin:$PATH"
@@ -32,5 +32,5 @@ cell F_validation act_nominal_unseeded 900 990 --policy lerobot --checkpoint $CK
 cell F_validation act_nominal_color_jitter_unseeded 900 990 --policy lerobot --checkpoint $CK/act_nominal_color_jitter_unseeded
 cell G_chunk act_nominal_unseeded_n50 1000 1090 --policy lerobot --checkpoint $CK/act_nominal_unseeded --policy-arg n_action_steps=50
 cell G_chunk act_nominal_unseeded_n25 1000 1090 --policy lerobot --checkpoint $CK/act_nominal_unseeded --policy-arg n_action_steps=25
-cell H_diffusion diffusion_policy_v2_randomized_look_seed0 1000 1090 --policy lerobot --checkpoint $CK/diffusion_policy_v2_randomized_look_seed0 --policy-arg n_action_steps=16
+cell H_diffusion diffusion_policy_randomized_look_seed0 1000 1090 --policy lerobot --checkpoint $CK/diffusion_policy_randomized_look_seed0 --policy-arg n_action_steps=16
 say "controls E-H done"

@@ -12,5 +12,5 @@ run() { # name checkpoint [extra args]
 }
 for s in 1 2 3; do run nominal400_seed$s $HF/act_nominal400_seed$s; done
 for n in act_randomized_look_seed0 act_randomized_look_seed1 act_randomized_look_seed2 act_nominal_unseeded act_nominal_seed1 act_nominal_seed2 act_nominal_seed3 act_both_renderers_unseeded act_both_renderers_seed1 act_isaac_only_100_unseeded act_isaac_only_200_unseeded act_isaac_only_200_seed1 act_isaac_only_400_unseeded act_chunk30_100demos_unseeded act_chunk100_100demos_unseeded; do run $n $HF/$n; done
-for n in diffusion_policy_v2_nominal_seed0 diffusion_policy_v2_randomized_look_seed0; do run $n $HF/$n --policy-arg n_action_steps=16; done
+for n in diffusion_policy_nominal_seed0 diffusion_policy_randomized_look_seed0; do run $n $HF/$n --policy-arg n_action_steps=16; done
 echo "newton rescore done $(date)" >> $STUDY/logs/newton_after_fix.log
