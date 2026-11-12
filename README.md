@@ -203,7 +203,7 @@ Probes of what the policy reads: `imitation_learning/image_edits.py` (`--policy-
   `results/<checkpoint>/` (index: `results/INDEX.tsv`), the per-seed success lists the paired tests are computed from, for every score of the study.
   It also publishes the per-seed validation files (MuJoCo seeds 900-999) of runs whose weights are not published, and the colour-jitter ACT model
   of the image-edit probes: [rizgiak/physai-study-01-checkpoints](https://huggingface.co/rizgiak/physai-study-01-checkpoints). Use one
-  directly: `--checkpoint hf:rizgiak/physai-study-01-checkpoints/act_randomized_look_seed0@e9cdc9feb6f1093cc65890d04a33e21031e52775`
+  directly: `--checkpoint hf:rizgiak/physai-study-01-checkpoints/act_randomized_look_seed0@9d9ff23af0c15340a7ed8cf50132128122c0ec3a`
   (downloaded into `checkpoints/`; `scripts/fetch_checkpoints.py` downloads ahead of time).
 - The Isaac Sim replays (400 episodes): [rizgiak/physai-study-01-isaac-replays](https://huggingface.co/datasets/rizgiak/physai-study-01-isaac-replays).
   The MuJoCo demonstrations are regenerated with the `--save-dataset` commands above.

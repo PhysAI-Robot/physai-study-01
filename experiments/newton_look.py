@@ -2,7 +2,7 @@
 
     python research/experiments/newton_look.py LOOK -- <eval_policy.py arguments>
 
-LOOK is one of the looks outside the training ranges (floor_fine, floor_bw, sky_dark, light_low, all_unseen) or the held-out look of the black-and-white-tile runs (heldout_v2,
+LOOK is one of the looks outside the training ranges (floor_fine, floor_bw, sky_dark, light_low, all_unseen) or the held-out look of the black-and-white-tile runs (heldout_look,
 fixed before those runs were scored). The look is set on the constants of `physai.sim.newton.render`.
 """
 
@@ -18,7 +18,7 @@ LOOKS = {
     "floor_bw": {"FLOOR_LIGHT": (1.0, 1.0, 1.0), "FLOOR_DARK": (0.1, 0.1, 0.1)},
     "sky_dark": {"SKY": (45, 55, 95)},
     "light_low": {"KEY_LIGHT_DIRECTION": (0.9, -0.2, -0.45)},
-    "heldout_v2": {  # wood-coloured two-brown tiles of 1/4 m, dark blue sky, key light mirrored
+    "heldout_look": {  # wood-coloured two-brown tiles of 1/4 m, dark blue sky, key light mirrored
         "TILE": 1 / 4,
         "FLOOR_LIGHT": (0.62, 0.42, 0.25),
         "FLOOR_DARK": (0.38, 0.25, 0.14),
