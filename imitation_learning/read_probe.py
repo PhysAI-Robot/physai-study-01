@@ -8,9 +8,9 @@ frames at that state and reports how far apart the two chunks are, per read and 
 region swapped. No policy runs on Isaac, so one pass over 100 seeds takes minutes.
 
     OMNI_KIT_ACCEPT_EULA=YES python research/imitation_learning/read_probe.py render \
-        --dataset data/study01/v1/probe_act_reads_mujoco/act200_mujoco --out outputs/study01/m5/reads_isaac.npz
+        --dataset data/study01/probe_act_reads_mujoco/act200_mujoco --out outputs/study01/probes/reads_isaac.npz
     python research/imitation_learning/read_probe.py compare \
-        --reads outputs/study01/m5/reads_isaac.npz --checkpoint outputs/study01/act_200_c100_60k
+        --reads outputs/study01/probes/reads_isaac.npz --checkpoint hf:rizgiak/physai-study-01-checkpoints/act_nominal_unseeded
 
 Research module: nothing in `src/physai` imports it.
 """

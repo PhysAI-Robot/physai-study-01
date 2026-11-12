@@ -4,8 +4,8 @@ Same data path as `train_act.py` (`ACTEpisodeDataset` over the .npz episodes, no
 `lerobot/smolvla_base`, the instruction is the task sentence of the dataset, and the optimizer follows the published SO-101 recipe:
 action expert trained, vision-language model frozen, cosine decay from 1e-4, chunk 50.
 
-    python research/imitation_learning/train_smolvla.py --dataset data/study01/v1/mujoco_nominal_200_seeds0-199 \\
-        data/study01/v1/mujoco_nominal_200_seeds200-399 --steps 20000 --batch-size 64 --out outputs/study01/v3/smolvla_nominal_seed1 --seed 1
+    python research/imitation_learning/train_smolvla.py --dataset data/study01/mujoco_nominal_200_seeds0-199 \\
+        data/study01/mujoco_nominal_200_seeds200-399 --steps 20000 --batch-size 64 --out outputs/study01/smolvla_nominal_seed1 --seed 1
 
 `--accum N` runs N micro-batches of `--batch-size / N` per optimizer step, so the batch of the recipe fits in 6 GB without changing it.
 `--steps` counts optimizer steps; `--steps 0` only writes the base model with this dataset's features and statistics (the untrained floor). The peak GPU memory and the time per step are written to `training_log.json`.

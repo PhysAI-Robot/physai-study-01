@@ -1,9 +1,9 @@
 """Do the ViperX front and wrist cameras see the same scene on every engine? (study 1)
 
-    python research/scripts/viperx300s_camera_parity.py --dump mujoco --out outputs/study01/v2/cams_mujoco.npz
-    OMNI_KIT_ACCEPT_EULA=YES python research/scripts/viperx300s_camera_parity.py --dump isaac --out outputs/study01/v2/cams_isaac.npz
-    python research/scripts/viperx300s_camera_parity.py --dump newton --out outputs/study01/v2/cams_newton.npz
-    python research/scripts/viperx300s_camera_parity.py --compare outputs/study01/v2/cams_mujoco.npz outputs/study01/v2/cams_isaac.npz outputs/study01/v2/cams_newton.npz
+    python research/scripts/viperx300s_camera_parity.py --dump mujoco --out outputs/study01/cams_mujoco.npz
+    OMNI_KIT_ACCEPT_EULA=YES python research/scripts/viperx300s_camera_parity.py --dump isaac --out outputs/study01/cams_isaac.npz
+    python research/scripts/viperx300s_camera_parity.py --dump newton --out outputs/study01/cams_newton.npz
+    python research/scripts/viperx300s_camera_parity.py --compare outputs/study01/cams_mujoco.npz outputs/study01/cams_isaac.npz outputs/study01/cams_newton.npz
 
 Each engine is dumped in its own process (one Isaac `SimulationApp` per process): the first `--seeds` episodes of the
 randomized manifest are reset on that engine and the front and wrist images at reset are saved with the cube and target

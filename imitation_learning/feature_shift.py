@@ -1,6 +1,6 @@
 """Does the encoder's view of the first frame predict which seeds fail on Isaac Sim?
 
-For each seed with a MuJoCo and an Isaac first frame (`data/study01/v1/probe_first_frames`, captured with
+For each seed with a MuJoCo and an Isaac first frame (`data/study01/probe_first_frames`, captured with
 `eval_policy.py --policy constant --max-steps 2 --save-dataset`), take the ACT image encoder's
 pooled features of the front and wrist camera in both renders and measure how far apart they
 are. The distance is scored as a predictor of whether the policy fails on that seed on Isaac
@@ -8,10 +8,10 @@ are. The distance is scored as a predictor of whether the policy fails on that s
 beat the pixels to count. No simulation runs.
 
     python research/imitation_learning/feature_shift.py \
-        --checkpoint outputs/study01/act_200_c100_60k \
-        --isaac-results outputs/study01/v1/isaac/val_base_isaac/merged.json \
-                        outputs/study01/v1/isaac/act_200_c100_60k_isaac_1000-1099/merged.json \
-        --out outputs/study01/v1/evals/c4_feature_shift.json
+        --checkpoint hf:rizgiak/physai-study-01-checkpoints/act_nominal_unseeded \
+        --isaac-results outputs/study01/isaac_controls/F_validation/act_nominal_unseeded/s*/merged.json \
+                        outputs/study01/isaac_nominal/act_nominal_unseeded/s*/merged.json \
+        --out outputs/study01/probes/feature_shift.json
 
 Research module: nothing in `src/physai` imports it.
 """
@@ -80,7 +80,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--checkpoint", type=Path, required=True)
     ap.add_argument(
-        "--first-frames", type=Path, default=Path("data/study01/v1/probe_first_frames")
+        "--first-frames", type=Path, default=Path("data/study01/probe_first_frames")
     )
     ap.add_argument("--isaac-results", type=Path, nargs="+", required=True)
     ap.add_argument(

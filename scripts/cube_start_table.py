@@ -4,14 +4,14 @@ Two steps. Measure the same seeds twice in two different orders (Isaac Sim only,
 
     OMNI_KIT_ACCEPT_EULA=YES python research/scripts/cube_start_table.py measure \
         --manifest configs/manifests/so101_single_cube_randomized_place.yaml \
-        --seeds 1000-1099 --order forward --out outputs/study01/v3/cube_so101_forward.json
-    ... --order reverse --out outputs/study01/v3/cube_so101_reverse.json
+        --seeds 1000-1099 --order forward --out outputs/study01/cube_so101_forward.json
+    ... --order reverse --out outputs/study01/cube_so101_reverse.json
 
 then decide from the two files (no Isaac Sim needed):
 
     python research/scripts/cube_start_table.py decide \
-        outputs/study01/v3/cube_so101_forward.json outputs/study01/v3/cube_so101_reverse.json \
-        --out outputs/study01/v3/cube_start_so101.json
+        outputs/study01/cube_so101_forward.json outputs/study01/cube_so101_reverse.json \
+        --out outputs/study01/cube_start_so101.json
 
 Why two orders: the shift of the cube after it is placed (about 3 mm for the SO-101, 8.6 mm for the
 ViperX in an earlier probe) may depend on where the cube sat in the episode before. `decide` writes

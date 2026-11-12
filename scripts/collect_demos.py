@@ -3,7 +3,7 @@
 This is the dataset you fine-tune a VLA on. Failed episodes are discarded by
 default — behaviour cloning on failures teaches failure.
 
-    python research/scripts/collect_demos.py --manifest research/configs/so101_randomized_pick_place.yaml --episodes 200 --dataset data/study01/v1/mujoco_nominal_200_seeds0-199
+    python research/scripts/collect_demos.py --manifest research/configs/so101_randomized_pick_place.yaml --episodes 200 --dataset data/study01/mujoco_nominal_200_seeds0-199
     python research/scripts/collect_demos.py --episodes 50 --keep-failures   # for analysis
     python research/scripts/collect_demos.py --manifest research/configs/so101_randomized_pick_place.yaml --episodes 200
 

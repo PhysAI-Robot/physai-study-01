@@ -35,7 +35,7 @@ SCENE = _ROOT / "assets" / "so101" / "_newton_scene.xml"  # meshes resolve besid
 
 # Looks outside every range of the randomized look (`so101_randomized_pick_place_visual_dr.yaml`:
 # tile repeat 3-12 so a tile of 1/12 to 1/3 m, floor colour multipliers 0.5-1.0 of the studio's,
-# lighting scale only, no sky and no light direction), for the held-out look test of M5c C1.
+# lighting scale only, no sky and no light direction), for the test of looks outside the training ranges.
 CONDITIONS = {
     "floor_fine": {"tile": 1 / 24},
     "floor_bw": {"floor_colors": [(1.0, 1.0, 1.0), (0.1, 0.1, 0.1)]},

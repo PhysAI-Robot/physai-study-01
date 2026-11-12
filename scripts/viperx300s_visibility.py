@@ -3,7 +3,7 @@
     python research/scripts/viperx300s_visibility.py --seeds 1300
     python research/scripts/viperx300s_visibility.py --seeds 100 --start 900
 
-Each object is counted by hiding it (alpha 0) and diffing the render, as for the SO-101 in study 1 M0.
+Each object is counted by hiding it (alpha 0) and diffing the render, as for the SO-101.
 Writes outputs/viperx300s/visibility.json (git-ignored) and prints the smallest counts per camera.
 """
 

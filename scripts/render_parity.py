@@ -12,7 +12,7 @@ flagged region is larger than FLAG_AREA pixels, else "global shift" when a regio
 
 A local difference is the brightness ratio of the two images minus its own smooth version (a median over a WINDOW px window), so a
 change of brightness or colour that is smooth over the picture, which every pair of engines has, is not flagged and an object that
-one renderer draws and the other does not is. The constants below were fixed in the study file before the first run.
+one renderer draws and the other does not is. The constants below were fixed before the first run.
 """
 
 from __future__ import annotations

@@ -4,8 +4,8 @@ Uses the real `lerobot` ACTPolicy/ACTConfig — every input/output shape and key
 name was verified against the installed library before this script was
 written (see conversation history / commit message), not guessed from memory.
 
-    python research/scripts/collect_demos.py --manifest research/configs/so101_randomized_pick_place.yaml --episodes 200 --dataset data/study01/v1/mujoco_nominal_200_seeds0-199
-    python research/imitation_learning/train_act.py --dataset data/study01/v1/mujoco_nominal_200_seeds0-199 --steps 60000 --chunk-size 100
+    python research/scripts/collect_demos.py --manifest research/configs/so101_randomized_pick_place.yaml --episodes 200 --dataset data/study01/mujoco_nominal_200_seeds0-199
+    python research/imitation_learning/train_act.py --dataset data/study01/mujoco_nominal_200_seeds0-199 --steps 60000 --chunk-size 100
 
 Chosen over SmolVLA for this hardware: SmolVLA carries a VLM backbone and
 needs far more than 4 GB of VRAM to fine-tune. ACT is the standard
