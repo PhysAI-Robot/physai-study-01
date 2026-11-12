@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  CORE_REF: study-01-v3
+  CORE_REF: study-01
 
 jobs:
   test:
