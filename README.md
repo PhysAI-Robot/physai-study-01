@@ -52,7 +52,7 @@ states and actions; pixels can differ by one grey level). Every episode is kept,
 (`success` per episode, `num_successful_episodes`); the expert delivers all 200 and all 400:
 
 ```bash
-uv run python scripts/eval_policy.py --manifest $M --policy scripted --seed 0 --episodes 200 --save-dataset data/randomized_v1
+uv run python scripts/eval_policy.py --manifest $M --policy scripted --seed 0 --episodes 200 --save-dataset data/mujoco_nominal_200_seeds0-199
 uv run python scripts/eval_policy.py --manifest research/configs/so101_randomized_pick_place_visual_dr.yaml --policy scripted \
   --seed 0 --episodes 400 --save-dataset data/visual_dr     # the look is randomized in every episode
 ```
@@ -60,7 +60,7 @@ uv run python scripts/eval_policy.py --manifest research/configs/so101_randomize
 ACT (chunk 100 played in full; add `--seed N` for a repeatable run):
 
 ```bash
-uv run python research/imitation_learning/train_act.py --dataset data/randomized_v1 --chunk-size 100 --steps 60000 --num-workers 0 --out outputs/act_nominal
+uv run python research/imitation_learning/train_act.py --dataset data/mujoco_nominal_200_seeds0-199 --chunk-size 100 --steps 60000 --num-workers 0 --out outputs/act_nominal
 uv run python research/imitation_learning/train_act.py --dataset data/visual_dr --chunk-size 100 --steps 120000 --num-workers 0 --out outputs/act_randomized_look
 uv run python scripts/eval_policy.py --manifest $M --policy lerobot --checkpoint outputs/act_nominal --episodes 300 --seed 1000 --json outputs/act_nominal_mujoco.json
 ```
@@ -69,7 +69,7 @@ Diffusion Policy (LeRobot; plays 16 of its 64 predicted actions; the evaluation 
 torch seed, so reruns differ in the details of an episode):
 
 ```bash
-uv run python research/imitation_learning/train_diffusion.py --dataset data/randomized_v1 --steps 100000 --lr 1e-4 --num-workers 0 --seed 0 --out outputs/dp_nominal
+uv run python research/imitation_learning/train_diffusion.py --dataset data/mujoco_nominal_200_seeds0-199 --steps 100000 --lr 1e-4 --num-workers 0 --seed 0 --out outputs/dp_nominal
 uv run python scripts/eval_policy.py --manifest $M --policy lerobot --checkpoint outputs/dp_nominal --policy-arg n_action_steps=16 --episodes 300 --seed 1000
 ```
 
@@ -84,12 +84,12 @@ Models trained on Isaac Sim frames: replay the MuJoCo demonstrations' actions on
 (alone, or together with the MuJoCo demonstrations):
 
 ```bash
-OMNI_KIT_ACCEPT_EULA=YES uv run python scripts/eval_policy.py --manifest $M --sim isaac --policy replay --dataset data/randomized_v1 \
-  --seed 0 --episodes 100 --save-dataset data/randomized_isaac_v1
+OMNI_KIT_ACCEPT_EULA=YES uv run python scripts/eval_policy.py --manifest $M --sim isaac --policy replay --dataset data/mujoco_nominal_200_seeds0-199 \
+  --seed 0 --episodes 100 --save-dataset data/isaac_replay_100_seeds0-99
 # the second hundred demonstrations: `--seed` is the index of the first episode of the dataset to replay
-OMNI_KIT_ACCEPT_EULA=YES uv run python scripts/eval_policy.py --manifest $M --sim isaac --policy replay --dataset data/randomized_v1 \
-  --seed 100 --episodes 100 --save-dataset data/randomized_isaac_v1b
-uv run python research/imitation_learning/train_act.py --dataset data/randomized_v1 data/randomized_isaac_v1 data/randomized_isaac_v1b \
+OMNI_KIT_ACCEPT_EULA=YES uv run python scripts/eval_policy.py --manifest $M --sim isaac --policy replay --dataset data/mujoco_nominal_200_seeds0-199 \
+  --seed 100 --episodes 100 --save-dataset data/isaac_replay_100_seeds100-199
+uv run python research/imitation_learning/train_act.py --dataset data/mujoco_nominal_200_seeds0-199 data/isaac_replay_100_seeds0-99 data/isaac_replay_100_seeds100-199 \
   --chunk-size 100 --steps 120000 --num-workers 0 --out outputs/act_both_renderers
 ```
 
@@ -127,7 +127,7 @@ done
 the order it asks the questions:
 
 1. Is the physics executing the actions? Replay the demonstrations' actions on the other engine without images:
-   `eval_policy.py --manifest $M --sim isaac --policy replay --dataset data/randomized_v1 --seed 0 --episodes 100 --json outputs/replay_isaac.json`.
+   `eval_policy.py --manifest $M --sim isaac --policy replay --dataset data/mujoco_nominal_200_seeds0-199 --seed 0 --episodes 100 --json outputs/replay_isaac.json`.
 2. How much is visual? The cells above: the loss with the other engine's pictures on your physics, with the other
    engine's physics on your pictures, and with both.
 3. Do two renderers draw the same scene? `scripts/render_parity.py` (poses, dump, compare; its docstring has the

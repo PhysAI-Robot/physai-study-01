@@ -1,5 +1,5 @@
 {
- "source": "Isaac Sim physics scoring run n13/act_randomized_look_seed0 (cube_start after reset, 0.1 mm), seeds 1000-1099, in that run's own order",
+ "source": "Isaac Sim physics scoring run act_randomized_look_seed0 (cube_start after reset, 0.1 mm), seeds 1000-1099, in that run's own order",
  "xy_by_seed": {
   "1000": [
    0.2074,

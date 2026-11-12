@@ -37,7 +37,7 @@ isaac_cell() { # NAME CKPT CELL FLAGS...   (shards of 10 seeds, 1000-1099; the s
   if [ "$1" -lt 50 ]; then say "T1P2 STOPPED (stop rule): fewer than 50 of 100 episodes started in $n $c"; exit 0; fi
 }
 
-for job in "randlook_30k t1b_smolvla_randlook_40k step_030000" "randlook_40k t1b_smolvla_randlook_40k step_040000" "nominal_30k t1a_smolvla_nominal_40k step_030000" "nominal_40k t1a_smolvla_nominal_40k step_040000"; do
+for job in "randlook_30k smolvla_randlook_40k step_030000" "randlook_40k smolvla_randlook_40k step_040000" "nominal_30k smolvla_nominal_40k step_030000" "nominal_40k smolvla_nominal_40k step_040000"; do
   set -- $job; n=$1; ck=$T/$2/$3
   mkdir -p $P/$n
   say "$n start ($ck)"

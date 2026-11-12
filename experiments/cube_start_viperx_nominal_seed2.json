@@ -1,5 +1,5 @@
 {
- "source": "Isaac Sim physics scoring run n14/im/nominal_seed2 (cube_start after reset, 0.1 mm), seeds 1000-1299, in that run's own order",
+ "source": "Isaac Sim physics scoring ViperX run nominal_seed2 (cube_start after reset, 0.1 mm), seeds 1000-1299, in that run's own order",
  "xy_by_seed": {
   "1000": [
    0.2998,
